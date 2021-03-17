@@ -1,5 +1,5 @@
 # digits
-The Interpreter for the Digits esotheric programming language
+Interpreter for the Digits esotheric programming language
 
 ## Building:
 ```sh

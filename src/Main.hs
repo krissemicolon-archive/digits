@@ -6,7 +6,7 @@ import System.Environment
 import System.Exit
 
 main :: IO ()
-main = getArgs >>= parse >>= runBF . parseBF
+main = getArgs >>= parse >>= runDG . parseDG
 
 parse ["-h"] = usage        >> exit
 parse ["-v"] = version      >> exit
@@ -17,7 +17,7 @@ usage   = putStrLn "Usage: digits [-v, -h] <file>"
 version = putStrLn "digits version 1.0.0"
 exit    = exitWith ExitSuccess
 
-data BFCommand = MoveRight     -- 0
+data DGCommand = MoveRight     -- 0
                | MoveLeft      -- 1
                | Increment     -- 2
                | Decrement     -- 3
@@ -27,12 +27,12 @@ data BFCommand = MoveRight     -- 0
                | LoopR         -- 7
                | Comment Char  -- anything else
 
-type BFSource = [BFCommand]
+type DGSource = [DGCommand]
 
-parseBF :: String -> BFSource
-parseBF = map charToBF
+parseDG :: String -> DGSource
+parseDG = map charToDG
     where
-        charToBF x = case x of
+        charToDG x = case x of
             '0' -> MoveRight
             '1' -> MoveLeft
             '2' -> Increment
@@ -58,12 +58,12 @@ moveRight (Tape ls p (r:rs)) = Tape (p:ls) r rs
 moveLeft :: Tape a -> Tape a
 moveLeft (Tape (l:ls) p rs) = Tape ls l (p:rs)
 
-runBF :: BFSource -> IO ()
-runBF = run emptyTape . bfSource2Tape
+runDG :: DGSource -> IO ()
+runDG = run emptyTape . bfSource2Tape
     where bfSource2Tape (b:bs) = Tape [] b bs
 
 advance :: Tape Int
-    -> Tape BFCommand
+    -> Tape DGCommand
     -> IO ()
 
 advance dataTape (Tape _ _ []) = return ()
@@ -71,7 +71,7 @@ advance dataTape source = run dataTape (moveRight source)
 
 seekLoopR :: Int
           -> Tape Int
-          -> Tape BFCommand
+          -> Tape DGCommand
           -> IO ()
 seekLoopR 1 dataTape source@(Tape _ LoopR _) = advance dataTape source
 seekLoopR b dataTape source@(Tape _ LoopR _) =
@@ -83,7 +83,7 @@ seekLoopR b dataTape source =
 
 seekLoopL :: Int
           -> Tape Int
-          -> Tape BFCommand
+          -> Tape DGCommand
           -> IO ()
 seekLoopL 1 dataTape source@(Tape _ LoopL _) = advance dataTape source
 seekLoopL b dataTape source@(Tape _ LoopL _) =
@@ -94,7 +94,7 @@ seekLoopL b dataTape source =
     seekLoopL b dataTape (moveLeft source)
 
 run :: Tape Int
-    -> Tape BFCommand
+    -> Tape DGCommand
     -> IO ()
 
 run dataTape source@(Tape _ MoveRight _) =

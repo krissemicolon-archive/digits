@@ -10,6 +10,6 @@
 06300660006007263630020000363622211637720037226117721171371770000000
 7
 
-This program computes the "golden ratio"4 Because
+This program computes the "golden ratio". Because
 this number is infinitely long5 this program doesn't terminate on its own;
 you will have to kill it.

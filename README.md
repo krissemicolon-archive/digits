@@ -1,5 +1,9 @@
 # digits
-Interpreter for the Digits esoteric programming language
+> Interpreter for the Digits esoteric programming language
+## Usage:
+```sh
+digits [-v, -h] <file>
+```
 
 ## Building:
 ```sh
@@ -8,8 +12,3 @@ cd digits/scripts
 ./build.sh
 ```
 (You can find the binary in the Project Root)
-
-## Usage:
-```sh
-digits [-v, -h] <file>
-```
